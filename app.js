@@ -1,8 +1,19 @@
-import express from "express";
+const express = require("express");
 const bodyParser = require("body-parser");
+const session = require("express-session");
+const AccRoute = require("./src/routes/AccRoute");
+const SocialRouter = require("./src/routes/SocialRoute");
 
 const app = express();
-const config = require("./src/config/database");
+const port = process.env.PORT || 8080;
+app.use(
+  session({
+    secret: "secret",
+    resave: true,
+    saveUninitialized: true,
+  })
+);
+
 app.use([
   bodyParser.json(),
   bodyParser.urlencoded({
@@ -10,8 +21,8 @@ app.use([
   }),
 ]);
 app.use(express.static("public"));
-app.use("/", (req, res, next) => {
-  res.json("Hello");
-});
+app.use([AccRoute, SocialRouter]);
 
-app.listen(config.api_port);
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});
