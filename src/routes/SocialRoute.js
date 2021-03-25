@@ -1,13 +1,38 @@
 "use strict";
-const SocialController = require("../controllers/SocialController");
+const { SocialController } = require("../controllers");
 const express = require("express");
+const { authJwt } = require("../middleware");
 const SocialRouter = express.Router();
 
-SocialRouter.post("/social", SocialController.createSocial);
-SocialRouter.get("/social/:socialId", SocialController.getSocialById);
-SocialRouter.get("/socials/:username", SocialController.getAllSocialByUsername);
-SocialRouter.get("/socials", SocialController.getAllSocial);
-SocialRouter.put("/social/:socialId", SocialController.updateSocial);
-SocialRouter.delete("/social/:socialId", SocialController.deleteSocial);
+SocialRouter.post(
+  "/social",
+  [authJwt.verifyToken],
+  SocialController.createSocial
+);
+SocialRouter.get(
+  "/social/:socialId",
+  [authJwt.verifyToken],
+  SocialController.getSocialById
+);
+SocialRouter.get(
+  "/socials/:username",
+  [authJwt.verifyToken],
+  SocialController.getAllSocialByUsername
+);
+SocialRouter.get(
+  "/socials",
+  [authJwt.verifyToken],
+  SocialController.getAllSocial
+);
+SocialRouter.put(
+  "/social/:socialId",
+  [authJwt.verifyToken],
+  SocialController.updateSocial
+);
+SocialRouter.delete(
+  "/social/:socialId",
+  [authJwt.verifyToken],
+  SocialController.deleteSocial
+);
 
 module.exports = SocialRouter;

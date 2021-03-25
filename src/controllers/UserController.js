@@ -2,6 +2,7 @@
 
 const con = require("../../dbConnection");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 exports.register = async function (req, res) {
   const password = req.body.password;
@@ -50,10 +51,29 @@ exports.login = async function (req, res) {
             results[0].password
           );
           if (comparision) {
-            res.send({
-              code: 200,
-              success: "login sucessfull",
-            });
+            con.query(
+              "SELECT * FROM users WHERE username = ?",
+              [username],
+              (error, results, fields) => {
+                if (error) {
+                  res.status(400).send({
+                    failed: "error ocurred",
+                  });
+                } else {
+                  const token = jwt.sign(
+                    { id: results[0].userId },
+                    process.env.JWT_KEY,
+                    {
+                      expiresIn: 86400, // 24 hours
+                    }
+                  );
+                  res.status(200).send({
+                    data: results,
+                    accessToken: token,
+                  });
+                }
+              }
+            );
           } else {
             res.send({
               code: 204,
@@ -121,4 +141,22 @@ exports.updateUser = (req, res) => {
       }
     }
   );
+};
+
+exports.createUser = (req, res) => {
+  const user = req.file;
+  con.query("INSERT INTO users SET ?", [user], (error, results, fields) => {
+    if (error) {
+      res.send({
+        code: 400,
+        failed: "error ocurred",
+      });
+      console.log(error);
+    } else {
+      res.send({
+        code: 200,
+        success: "Create sucessfully",
+      });
+    }
+  });
 };
