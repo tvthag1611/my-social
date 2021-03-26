@@ -1,13 +1,20 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const session = require("express-session");
+const cors = require("cors");
 
 const fs = require("fs");
 const { UserRoute } = require("./src/routes");
 const { SocialRoute } = require("./src/routes");
 
+global.__basedir = __dirname;
+const corsOptions = {
+  origin: "http://localhost:8081",
+};
+
 const app = express();
 const port = process.env.PORT || 8080;
+app.use(cors(corsOptions));
 app.use(
   session({
     secret: "secret",

@@ -16,15 +16,15 @@ exports.verifyToken = (req, res, next) => {
         message: "Unauthorized!",
       });
     }
-    req.userId = decoded.id;
+    req.username = decoded.username;
     next();
   });
 };
 
 exports.isAdmin = (req, res, next) => {
-  const userId = req.userId;
+  const username = req.username;
   con.query(
-    "SELECT * FROM users WHERE userId = ? AND role = ?",
+    "SELECT * FROM users WHERE username = ? AND role = ?",
     [userId, "admin"],
     (error, results, fields) => {
       if (error) {

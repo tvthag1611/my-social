@@ -61,7 +61,7 @@ exports.login = async function (req, res) {
                   });
                 } else {
                   const token = jwt.sign(
-                    { id: results[0].userId },
+                    { username: results[0].username },
                     process.env.JWT_KEY,
                     {
                       expiresIn: 86400, // 24 hours
@@ -107,7 +107,7 @@ exports.getUser = (req, res) => {
         if (results.length > 0) {
           res.send({
             status: 200,
-            data: results,
+            data: results[0],
           });
         } else {
           res.send({
@@ -144,7 +144,10 @@ exports.updateUser = (req, res) => {
 };
 
 exports.createUser = (req, res) => {
-  const user = req.file;
+  const user = req.body;
+  user.role = "user";
+  if (!user.imageUser)
+    user.imageUser = "http://localhost:8080/PIC_20210126_154011579.jpg";
   con.query("INSERT INTO users SET ?", [user], (error, results, fields) => {
     if (error) {
       res.send({

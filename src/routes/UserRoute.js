@@ -1,5 +1,5 @@
 "use strict";
-const { UserController } = require("../controllers");
+const { UserController, UploadController } = require("../controllers");
 const express = require("express");
 const { verifySignUp, authJwt } = require("../middleware");
 const UserRouter = express.Router();
@@ -25,5 +25,7 @@ UserRouter.post(
   [authJwt.verifyToken, authJwt.isAdmin],
   UserController.createUser
 );
-
+UserRouter.post("/upload", UploadController.upload);
+UserRouter.get("/files", UploadController.getListFiles);
+UserRouter.get("/files/:name", UploadController.download);
 module.exports = UserRouter;

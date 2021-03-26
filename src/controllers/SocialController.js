@@ -4,7 +4,7 @@ const con = require("../../dbConnection");
 
 exports.createSocial = (req, res) => {
   const social = req.body;
-
+  social.reaction = 0;
   con.query("INSERT INTO socials SET ?", [social], (error, results, fields) => {
     if (error) {
       res.send({
@@ -31,7 +31,7 @@ exports.getAllSocial = (req, res) => {
     } else {
       res.send({
         code: 200,
-        data: results,
+        data: results[0],
       });
     }
   });
@@ -51,7 +51,7 @@ exports.getAllSocialByUsername = (req, res) => {
       } else {
         res.send({
           code: 200,
-          data: results,
+          data: results[0],
         });
       }
     }
@@ -72,7 +72,7 @@ exports.getSocialById = (req, res) => {
       } else {
         res.send({
           code: 200,
-          data: results,
+          data: results[0],
         });
       }
     }
