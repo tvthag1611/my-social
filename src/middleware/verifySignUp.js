@@ -9,11 +9,12 @@ exports.checkDuplicateUsername = (req, res, next) => {
       if (error) {
         res.send({
           status: 400,
-          failed: "error",
+          message: "error",
         });
       } else {
         if (!results) {
-          res.status(400).send({
+          res.send({
+            status: 400,
             message: "Failed! Username is already in use",
           });
           return;

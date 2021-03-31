@@ -17,14 +17,10 @@ UserRouter.get(
 );
 UserRouter.put(
   "/users/:username",
-  [authJwt.verifyToken, authJwt.isAdmin],
+  [authJwt.verifyToken],
   UserController.updateUser
 );
-UserRouter.post(
-  "/users",
-  [authJwt.verifyToken, authJwt.isAdmin],
-  UserController.createUser
-);
+UserRouter.post("/users", UserController.createUser);
 UserRouter.post("/upload", UploadController.upload);
 UserRouter.get("/files", UploadController.getListFiles);
 UserRouter.get("/files/:name", UploadController.download);

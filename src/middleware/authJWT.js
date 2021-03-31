@@ -5,14 +5,16 @@ exports.verifyToken = (req, res, next) => {
   let token = req.headers["x-access-token"];
 
   if (!token) {
-    return res.status(403).send({
+    return res.send({
+      status: 403,
       message: "No token provided!",
     });
   }
 
   jwt.verify(token, process.env.JWT_KEY, (err, decoded) => {
     if (err) {
-      return res.status(401).send({
+      return res.send({
+        status: 401,
         message: "Unauthorized!",
       });
     }
@@ -25,15 +27,17 @@ exports.isAdmin = (req, res, next) => {
   const username = req.username;
   con.query(
     "SELECT * FROM users WHERE username = ? AND role = ?",
-    [userId, "admin"],
+    [username, "admin"],
     (error, results, fields) => {
       if (error) {
-        res.status(400).send({
-          faild: "error",
+        res.send({
+          status: 400,
+          message: "error",
         });
       } else {
         if (results.length === 0) {
-          res.status(403).send({
+          res.send({
+            status: 403,
             message: "Require Admin Role!",
           });
           return;

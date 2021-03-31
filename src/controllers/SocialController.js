@@ -8,14 +8,14 @@ exports.createSocial = (req, res) => {
   con.query("INSERT INTO socials SET ?", [social], (error, results, fields) => {
     if (error) {
       res.send({
-        code: 400,
-        failed: "error ocurred",
+        status: 400,
+        message: "error ocurred",
       });
       console.log(error);
     } else {
       res.send({
-        code: 200,
-        success: "create new post success",
+        status: 200,
+        message: "create new post success",
       });
     }
   });
@@ -25,13 +25,13 @@ exports.getAllSocial = (req, res) => {
   con.query("SELECT * FROM socials", (error, results, fields) => {
     if (error) {
       res.send({
-        code: 400,
-        failed: "error ocurred",
+        status: 400,
+        message: "error ocurred",
       });
     } else {
       res.send({
-        code: 200,
-        data: results[0],
+        status: 200,
+        data: results,
       });
     }
   });
@@ -45,13 +45,13 @@ exports.getAllSocialByUsername = (req, res) => {
     (error, results, fields) => {
       if (error) {
         res.send({
-          code: 400,
-          failed: "error ocurred",
+          status: 400,
+          message: "error ocurred",
         });
       } else {
         res.send({
-          code: 200,
-          data: results[0],
+          status: 200,
+          data: results,
         });
       }
     }
@@ -66,12 +66,12 @@ exports.getSocialById = (req, res) => {
     (error, results, fields) => {
       if (error) {
         res.send({
-          code: 400,
-          failed: "error ocurred",
+          status: 400,
+          message: "error ocurred",
         });
       } else {
         res.send({
-          code: 200,
+          status: 200,
           data: results[0],
         });
       }
@@ -88,13 +88,13 @@ exports.updateSocial = (req, res) => {
     (error, results, fields) => {
       if (error) {
         res.send({
-          code: 400,
-          failed: "error ocurred",
+          status: 400,
+          message: "error ocurred",
         });
       } else {
         res.send({
-          code: 200,
-          success: "updated social success",
+          status: 200,
+          message: "updated social success",
         });
       }
     }
@@ -109,13 +109,13 @@ exports.deleteSocial = (req, res) => {
     (error, results, fields) => {
       if (error) {
         res.send({
-          code: 400,
-          failed: "error ocurred",
+          status: 400,
+          message: "error ocurred",
         });
       } else {
         res.send({
-          code: 200,
-          success: "deleted social success",
+          status: 200,
+          message: "deleted social success",
         });
       }
     }

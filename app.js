@@ -1,20 +1,15 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const session = require("express-session");
+const multer = require("multer");
 const cors = require("cors");
-
-const fs = require("fs");
 const { UserRoute } = require("./src/routes");
 const { SocialRoute } = require("./src/routes");
 
 global.__basedir = __dirname;
-const corsOptions = {
-  origin: "http://localhost:8081",
-};
 
 const app = express();
+const upload = multer();
 const port = process.env.PORT || 8080;
-app.use(cors(corsOptions));
 app.use(
   session({
     secret: "secret",
@@ -23,21 +18,15 @@ app.use(
   })
 );
 
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
+app.use(cors());
 
 app.use([
-  bodyParser.json(),
-  bodyParser.urlencoded({
+  express.json(),
+  express.urlencoded({
     extended: true,
   }),
 ]);
+app.use(upload.array());
 app.use(express.static("public"));
 app.use([UserRoute, SocialRoute]);
 

@@ -18,14 +18,14 @@ exports.register = async function (req, res) {
     function (error, results, fields) {
       if (error) {
         res.send({
-          code: 400,
-          failed: "error ocurred",
+          status: 400,
+          message: "error ocurred",
         });
         console.log(error);
       } else {
         res.send({
-          code: 200,
-          success: "user registered sucessfully",
+          status: 200,
+          message: "User registered sucessfully",
         });
       }
     }
@@ -33,6 +33,7 @@ exports.register = async function (req, res) {
 };
 
 exports.login = async function (req, res) {
+  console.log("body", req.body);
   const username = req.body.username;
   const password = req.body.password;
   con.query(
@@ -41,8 +42,8 @@ exports.login = async function (req, res) {
     async function (error, results, fields) {
       if (error) {
         res.send({
-          code: 400,
-          failed: "error ocurred",
+          status: 400,
+          message: "error ocurred",
         });
       } else {
         if (results.length > 0) {
@@ -67,8 +68,9 @@ exports.login = async function (req, res) {
                       expiresIn: 86400, // 24 hours
                     }
                   );
-                  res.status(200).send({
-                    data: results,
+                  res.send({
+                    status: 200,
+                    data: results[0],
                     accessToken: token,
                   });
                 }
@@ -76,14 +78,14 @@ exports.login = async function (req, res) {
             );
           } else {
             res.send({
-              code: 204,
-              success: "Username and password does not match",
+              status: 204,
+              message: "Username and password does not match",
             });
           }
         } else {
           res.send({
-            code: 206,
-            success: "Username does not exits",
+            status: 206,
+            message: "Username does not exits",
           });
         }
       }
@@ -99,8 +101,8 @@ exports.getUser = (req, res) => {
     (error, results, fields) => {
       if (error) {
         res.send({
-          code: 400,
-          failed: "error ocurred",
+          status: 400,
+          message: "error ocurred",
         });
         console.log(error);
       } else {
@@ -111,8 +113,8 @@ exports.getUser = (req, res) => {
           });
         } else {
           res.send({
-            code: 206,
-            success: "Username does not exits",
+            status: 206,
+            message: "Username does not exits",
           });
         }
       }
@@ -129,14 +131,14 @@ exports.updateUser = (req, res) => {
     (error, results, fields) => {
       if (error) {
         res.send({
-          code: 400,
-          failed: "error ocurred",
+          status: 400,
+          message: "error ocurred",
         });
         console.log(error);
       } else {
         res.send({
-          code: 200,
-          success: "updated sucessfully",
+          status: 200,
+          message: "updated sucessfully",
         });
       }
     }
@@ -151,14 +153,14 @@ exports.createUser = (req, res) => {
   con.query("INSERT INTO users SET ?", [user], (error, results, fields) => {
     if (error) {
       res.send({
-        code: 400,
-        failed: "error ocurred",
+        status: 400,
+        message: "error ocurred",
       });
       console.log(error);
     } else {
       res.send({
-        code: 200,
-        success: "Create sucessfully",
+        status: 200,
+        message: "Create sucessfully",
       });
     }
   });

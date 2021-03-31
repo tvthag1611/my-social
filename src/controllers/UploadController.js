@@ -7,14 +7,16 @@ const upload = async (req, res) => {
     await uploadFile(req, res);
 
     if (req.file == undefined) {
-      return res.status(400).send({ message: "Please upload a file!" });
+      return res.send({ status: 400, message: "Please upload a file!" });
     }
 
-    res.status(200).send({
+    res.send({
+      status: 200,
       message: "Uploaded the file successfully: " + req.file?.originalname,
     });
   } catch (err) {
-    res.status(500).send({
+    res.send({
+      status: 500,
       message: `Could not upload the file: ${req.file?.originalname}. ${err}`,
     });
   }
@@ -25,7 +27,8 @@ const getListFiles = (req, res) => {
 
   fs.readdir(directoryPath, function (err, files) {
     if (err) {
-      res.status(500).send({
+      res.send({
+        status: 500,
         message: "Unable to scan files!",
       });
     }
@@ -39,7 +42,7 @@ const getListFiles = (req, res) => {
       });
     });
 
-    res.status(200).send(fileInfos);
+    res.send({ status: 200, fileInfos });
   });
 };
 
@@ -49,7 +52,8 @@ const download = (req, res) => {
 
   res.download(directoryPath + fileName, fileName, (err) => {
     if (err) {
-      res.status(500).send({
+      res.send({
+        status: 500,
         message: "Could not download the file. " + err,
       });
     }
